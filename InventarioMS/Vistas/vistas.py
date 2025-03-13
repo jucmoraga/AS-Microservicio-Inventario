@@ -1,7 +1,8 @@
 from flask_restful import Resource
 from ..Modelos import db, Producto, Inventario, Bodega, ProductoSchema, InventarioSchema
 from flask import request
-from datetime import datetime
+from datetime import datetime, timedelta
+import random
 
 class VistaProducto(Resource):
     def get(self):
@@ -41,3 +42,22 @@ class VistaInventario(Resource):
         inventario.cantidad = inventario.cantidad - data['salida']
         db.session.commit()
         return {'mensaje': 'Inventario actualizado'}, 200
+
+class entradaAleatoria(Resource):
+    def get(self):
+        inventario = Inventario(
+            sku=random.choice(Producto.query.all()).sku,
+            cantidad=random.randint(1, 100),
+            fechaCompra=datetime.now().date(),
+            fechaVencimiento=(datetime.now()+timedelta(days=365)).date(),
+            bodega_id=random.choice(Bodega.query.all()).id
+        )
+        return [InventarioSchema().dump(inventario)]
+
+class salidaAleatoria(Resource):
+    def get(self):
+        inventario = random.choice(Inventario.query.all())
+        cantidad = inventario.cantidad
+        id = inventario.id
+        cantidad = random.randint(1, cantidad)
+        return {'id': id, 'salida': cantidad}

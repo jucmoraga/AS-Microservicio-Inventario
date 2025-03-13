@@ -64,7 +64,7 @@ class InventarioSchema(SQLAlchemyAutoSchema):
         model = Inventario
         include_relationships = True
         load_instance = True
-        id = fields.Int()
+    id = fields.Int()
     sku = fields.Str()
     cantidad = fields.Int()
     fechaCompra = fields.Date()

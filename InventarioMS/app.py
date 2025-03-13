@@ -1,7 +1,7 @@
 from InventarioMS import create_app
 from .Modelos import db, Producto, Bodega
 from flask_restful import Api
-from .Vistas import VistaProducto, VistaInventario
+from .Vistas import VistaProducto, VistaInventario, entradaAleatoria, salidaAleatoria
 from .dataexperimento import bodegasExperimento, productosExperimento
 
 
@@ -15,6 +15,8 @@ db.create_all()
 api = Api(app)
 api.add_resource(VistaProducto, '/productos')
 api.add_resource(VistaInventario, '/inventarios')
+api.add_resource(entradaAleatoria, '/entradaAleatoria')
+api.add_resource(salidaAleatoria, '/salidaAleatoria')
 
 
 ### Carga de datos de prueba
