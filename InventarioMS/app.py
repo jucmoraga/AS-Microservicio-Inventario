@@ -3,9 +3,11 @@ from .Modelos import db, Producto, Bodega
 from flask_restful import Api
 from .Vistas import VistaProducto, VistaInventario, entradaAleatoria, salidaAleatoria
 from .dataexperimento import bodegasExperimento, productosExperimento
+from flask_jwt_extended import JWTManager
 
 
 app = create_app('default')
+jwt = JWTManager(app)
 app_context = app.app_context()
 app_context.push()
 
