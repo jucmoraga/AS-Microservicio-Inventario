@@ -52,11 +52,12 @@ class VistaInventario(Resource):
         inventario.cantidad = inventario.cantidad - data['salida']
         db.session.commit()
         return {'mensaje': 'Inventario actualizado'}, 200
+    
 
 class entradaAleatoria(Resource):
     @jwt_required()
     @roles_required([1],'GET')
-    def get(self):
+    def post(self):
         inventario = Inventario(
             sku=random.choice(Producto.query.all()).sku,
             cantidad=random.randint(1, 100),
@@ -64,14 +65,17 @@ class entradaAleatoria(Resource):
             fechaVencimiento=(datetime.now()+timedelta(days=365)).date(),
             bodega_id=random.choice(Bodega.query.all()).id
         )
-        return [InventarioSchema().dump(inventario)]
-
+        db.session.add(inventario)
+        db.session.commit()
+        return {'mensaje': 'Se creó un nuevo Lote de Inventario'}, 201
+    
 class salidaAleatoria(Resource):
     @jwt_required()
     @roles_required([1],'GET')
-    def get(self):
+    def put(self):
         inventario = random.choice(Inventario.query.all())
         cantidad = inventario.cantidad
-        id = inventario.id
-        cantidad = random.randint(1, cantidad)
-        return {'id': id, 'salida': cantidad}
+        inventario.cantidad = random.randint(1, cantidad)
+        db.session.commit()
+        return {'mensaje': 'Se registró una salida del lote de inventario nro ' + str(inventario.id)}, 200
+    
