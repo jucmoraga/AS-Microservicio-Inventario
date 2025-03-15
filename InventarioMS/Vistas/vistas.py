@@ -56,7 +56,7 @@ class VistaInventario(Resource):
 
 class entradaAleatoria(Resource):
     @jwt_required()
-    @roles_required([1],'GET')
+    @roles_required([1],'POST')
     def post(self):
         inventario = Inventario(
             sku=random.choice(Producto.query.all()).sku,
@@ -71,7 +71,7 @@ class entradaAleatoria(Resource):
     
 class salidaAleatoria(Resource):
     @jwt_required()
-    @roles_required([1],'GET')
+    @roles_required([1],'PUT')
     def put(self):
         inventario = random.choice(Inventario.query.all())
         cantidad = inventario.cantidad
